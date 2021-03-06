@@ -33,11 +33,12 @@
     android:layout_below="@id/toolbar"
     tools:context=".MapsActivity" />
 
-    <Button
-        android:id="@+id/btn_number"
+    <TextView
+        android:id="@+id/txt_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/map"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="200dp"
         android:text="NUMBER"/>
 
