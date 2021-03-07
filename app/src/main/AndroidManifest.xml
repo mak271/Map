@@ -21,7 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
-        <service android:name=".MyService" />
+        <receiver
+            android:name=".MyServiceLocation"/>
+
+        <service android:name=".MyServiceTimer" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -36,6 +39,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".DatabaseActivity"
+            android:label="DatabaseActivity"
+            android:parentActivityName=".MapsActivity"
+            />
     </application>
 
 </manifest>
