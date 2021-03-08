@@ -1,4 +1,4 @@
-package com.example.map
+package com.example.map.DB
 
 import android.content.Context
 import androidx.room.Database

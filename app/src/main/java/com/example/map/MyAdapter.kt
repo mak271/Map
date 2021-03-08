@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.map.DB.DatabaseORMModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,8 +33,8 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         holder.apply {
             tvDate.text = "$formatted_date    $formatted_day"
-            tvStart.text = item.start
-            tvEnd.text = item.end
+            tvStart.text = "Вошёл: ${item.start}"
+            tvEnd.text = "Вышел: ${item.end}"
         }
 
     }

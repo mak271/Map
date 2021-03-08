@@ -1,9 +1,10 @@
-package com.example.map
+package com.example.map.DB
 
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.example.map.DB.DatabaseORMModel
+import com.example.map.DB.MyRepository
 
 class MyViewModel(): ViewModel() {
 

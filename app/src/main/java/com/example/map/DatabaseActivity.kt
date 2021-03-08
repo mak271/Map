@@ -1,22 +1,24 @@
 package com.example.map
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.map.DB.MyViewModel
+import com.example.map.DB.ViewModelFactory
 
 class DatabaseActivity: AppCompatActivity() {
 
     private lateinit var adapter: MyAdapter
-    private var myViewModel: MyViewModel? = null
+
+
+    companion object {
+        var myViewModel: MyViewModel? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,18 +33,6 @@ class DatabaseActivity: AppCompatActivity() {
         myViewModel?.selectAll(this)?.observe(this, Observer {
             adapter.initList(it)
         })
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            object : BroadcastReceiver() {
-                override fun onReceive(context: Context?, intent: Intent?) {
-                    val start = intent?.getStringExtra(MyServiceTimer.EXTRA_START)
-                    val end = intent?.getStringExtra(MyServiceTimer.EXTRA_END)
-
-                    //myViewModel?.insert(this@DatabaseActivity, DatabaseORMModel(start.toString(), end.toString()))
-
-                }
-            }, IntentFilter(MyServiceTimer.ACTION_TIME_BROADCAST)
-        )
 
         findViewById<Button>(R.id.btn_back).setOnClickListener {
             startActivity(Intent(this, MapsActivity::class.java))

@@ -40,14 +40,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var tv_timer: TextView
 
     private lateinit var text_view: TextView
-    private var currentLocation: Location? = null
 
     companion object {
-        val radius = 30.0
+        const val radius = 30.0
         val ivanovo1 = LatLng(56.99545039, 40.96074659)
         val ivanovo2 = LatLng(56.99670852, 40.96133581)
         val distance1 = FloatArray(2)
         val distance2 = FloatArray(2)
+
+        var currentLocation: Location? = null
 
         var instance: MapsActivity? = null
 
@@ -113,6 +114,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         tv_timer.text = result
 
+                        //println("${distance1[0]}/${distance2[0]}")
+
                         if (currentLocation != null) {
                             Location.distanceBetween(
                                 currentLocation!!.latitude,
@@ -130,7 +133,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 distance2
                             )
 
-                            println("${distance1[0]}/${distance2[0]}")
                         }
 
 

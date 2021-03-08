@@ -1,15 +1,15 @@
-package com.example.map
+package com.example.map.DB
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface DAODatabaseORM {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(mode: DatabaseORMModel)
 
     @Query("SELECT * FROM DatabaseORMModel")

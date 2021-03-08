@@ -3,8 +3,14 @@ package com.example.map
 import android.app.Service
 import android.content.Intent
 import android.os.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModel
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.map.DB.DatabaseORMModel
+import com.example.map.DB.MyViewModel
+import com.example.map.DatabaseActivity.Companion.myViewModel
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.thread
@@ -14,10 +20,14 @@ class MyServiceTimer : Service() {
 
     var serviceLooper: Looper? = null
     private var handlerService: HandlerService? = null
-    var count: Double = 0.0
 
     private var myTimerTask: TimerTask? = null
     private lateinit var timer: Timer
+
+    var calendar: Calendar? = null
+    var sdf: SimpleDateFormat? = null
+
+    var myViewModel: MyViewModel? = null
 
     companion object {
         val ACTION_COUNT_BROADCAST: String = MyServiceTimer::class.java.name + "CountBroadcast"
@@ -25,6 +35,10 @@ class MyServiceTimer : Service() {
         val EXTRA_TIME = "extra_time"
         val EXTRA_START = "extra_start"
         val EXTRA_END = "extra_end"
+
+        var count: Double = 0.0
+        var startTime: String? = null
+        var endTime: String? = null
     }
 
     private inner class HandlerService(looper: Looper): Handler(looper) {
@@ -39,6 +53,16 @@ class MyServiceTimer : Service() {
     }
 
     private fun resetTimer() {
+
+        if (count != 0.0) {
+            endTime = sdf?.format(calendar?.time)
+            println("End")
+
+            myViewModel = MyViewModel()
+            myViewModel?.insert(this, DatabaseORMModel(startTime!!, endTime!!))
+
+        }
+
         count = 0.0
         sendBroadcastMessage(formatTime(0,0,0))
     }
@@ -49,24 +73,25 @@ class MyServiceTimer : Service() {
             override fun run() {
                 thread {
 
-                    val calendar: Calendar = Calendar.getInstance()
-                    val sdf = SimpleDateFormat("hh:mm:ss")
-                    count++
+                    calendar = Calendar.getInstance()
+                    sdf = SimpleDateFormat("hh:mm:ss")
+
+                    if (((MapsActivity.distance1[0] <= MapsActivity.radius) && (MapsActivity.distance1[0] >= 0.1)) || ((MapsActivity.distance2[0] <= MapsActivity.radius) && (MapsActivity.distance2[0] >= 0.1))) {
+
+                        if (count == 0.0)
+                            startTime = sdf?.format(calendar?.time)
 
 
-                    if ((MapsActivity.distance1[0] <= MapsActivity.radius) || (MapsActivity.distance2[0] <= MapsActivity.radius))
-                    {
-
+                        count++
                         sendBroadcastMessage(getTimerText())
-                        val startTime = sdf.format(calendar.time)
+                        println(count)
 
                     }
-                    else {
+                    else  {
+
+
                         resetTimer()
-                        val endTime = sdf.format(calendar.time)
-                        //sendBroadcastTime(startTime, endTime)
                     }
-
 
                 }
             }
@@ -85,8 +110,6 @@ class MyServiceTimer : Service() {
         val seconds = rounded % 86400 % 3600 % 60
         val minutes = rounded % 86400 % 3600 / 60
         val hours = rounded % 86400 / 3600
-
-
 
         return formatTime(seconds, minutes, hours)
     }
@@ -107,9 +130,7 @@ class MyServiceTimer : Service() {
         message.arg1 = startId
         handlerService?.handleMessage(message)
 
-
-
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -120,7 +141,6 @@ class MyServiceTimer : Service() {
         super.onDestroy()
 
     }
-
 
     private fun sendBroadcastMessage(time: String) {
         val intent = Intent(ACTION_COUNT_BROADCAST)
@@ -135,10 +155,4 @@ class MyServiceTimer : Service() {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
-//    private fun sendLocation(location: Location) {
-//        val intent = Intent(ACTION_LOCATION_BROADCAST)
-//        intent.putExtra(EXTRA_LATITUDE, location.latitude)
-//        intent.putExtra(EXTRA_LONGTITUDE, location.longitude)
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-//    }
 }
