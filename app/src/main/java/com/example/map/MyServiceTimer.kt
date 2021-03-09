@@ -29,16 +29,13 @@ class MyServiceTimer : Service() {
 
     var myViewModel: MyViewModel? = null
 
+    var count: Double = 0.0
+    var startTime: String? = null
+    var endTime: String? = null
+
     companion object {
         val ACTION_COUNT_BROADCAST: String = MyServiceTimer::class.java.name + "CountBroadcast"
-        val ACTION_TIME_BROADCAST: String = MyServiceTimer::class.java.name + "TimeBroadcast"
         val EXTRA_TIME = "extra_time"
-        val EXTRA_START = "extra_start"
-        val EXTRA_END = "extra_end"
-
-        var count: Double = 0.0
-        var startTime: String? = null
-        var endTime: String? = null
     }
 
     private inner class HandlerService(looper: Looper): Handler(looper) {
@@ -76,22 +73,29 @@ class MyServiceTimer : Service() {
                     calendar = Calendar.getInstance()
                     sdf = SimpleDateFormat("hh:mm:ss")
 
-                    if (((MapsActivity.distance1[0] <= MapsActivity.radius) && (MapsActivity.distance1[0] >= 0.1)) || ((MapsActivity.distance2[0] <= MapsActivity.radius) && (MapsActivity.distance2[0] >= 0.1))) {
-
-                        if (count == 0.0)
-                            startTime = sdf?.format(calendar?.time)
 
 
-                        count++
-                        sendBroadcastMessage(getTimerText())
-                        println(count)
+                        if (((MapsActivity.distance1[0] <= MapsActivity.radius) && (MapsActivity.distance1[0] >= 0.1)) || ((MapsActivity.distance2[0] <= MapsActivity.radius) && (MapsActivity.distance2[0] >= 0.1))
+                            ) {
 
-                    }
-                    else  {
+                            if (count == 0.0)
+                                startTime = sdf?.format(calendar?.time)
 
 
-                        resetTimer()
-                    }
+                            count++
+                            sendBroadcastMessage(getTimerText())
+                            println(count)
+
+                        }
+                        else  {
+
+
+                            resetTimer()
+                        }
+
+
+
+
 
                 }
             }
@@ -145,13 +149,6 @@ class MyServiceTimer : Service() {
     private fun sendBroadcastMessage(time: String) {
         val intent = Intent(ACTION_COUNT_BROADCAST)
         intent.putExtra(EXTRA_TIME, time)
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
-    }
-
-    private fun sendBroadcastTime(start: String, end: String) {
-        val intent = Intent(ACTION_TIME_BROADCAST)
-        intent.putExtra(EXTRA_START, start)
-        intent.putExtra(EXTRA_END, end)
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 

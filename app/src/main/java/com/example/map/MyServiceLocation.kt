@@ -24,6 +24,38 @@ class MyServiceLocation : BroadcastReceiver() {
                     val location: Location = result.lastLocation
                     try {
 
+                        Location.distanceBetween(
+                                location.latitude,
+                                location.longitude,
+                                MapsActivity.ivanovo1.latitude,
+                                MapsActivity.ivanovo1.longitude,
+                                MapsActivity.distance1
+                        )
+
+                        Location.distanceBetween(
+                                location.latitude,
+                                location.longitude,
+                                MapsActivity.ivanovo2.latitude,
+                                MapsActivity.ivanovo2.longitude,
+                                MapsActivity.distance2
+                        )
+
+                        if (MapsActivity.m1 != null) {
+                            Location.distanceBetween(
+                                location.latitude,
+                                location.longitude,
+                                MapsActivity.m1?.position?.latitude!!,
+                                MapsActivity.m1?.position?.longitude!!,
+                                MapsActivity.distance3
+                            )
+                        }
+
+
+
+
+
+
+
                         MapsActivity.getMainInstance().update(location)
 
                     } catch (e: Exception) {

@@ -1,27 +1,33 @@
 package com.example.map
 
 import android.Manifest
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.Color.rgb
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.*
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -38,17 +44,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var circleOptions2: CircleOptions
 
     private lateinit var tv_timer: TextView
-
     private lateinit var text_view: TextView
+    private lateinit var btn_edit: Button
+
+    var markerCount: Int = 0
+
+    private var mtemp: Marker? = null
+    private var circle1: Circle? = null
+    private var circle2: Circle? = null
+    private var ctemp: Circle? = null
 
     companion object {
         const val radius = 30.0
+
+        var rad: Double? = null
+
         val ivanovo1 = LatLng(56.99545039, 40.96074659)
         val ivanovo2 = LatLng(56.99670852, 40.96133581)
+        var m1: Marker? = null
+        var m2: Marker? = null
         val distance1 = FloatArray(2)
         val distance2 = FloatArray(2)
+        val distance3 = FloatArray(2)
 
-        var currentLocation: Location? = null
+
 
         var instance: MapsActivity? = null
 
@@ -60,7 +79,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun update(value: Location) {
         this@MapsActivity.runOnUiThread {
             text_view.text = value.toString()
-            currentLocation = value
         }
     }
 
@@ -77,6 +95,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         instance = this
 
         text_view = findViewById(R.id.txt_location)
+        btn_edit = findViewById(R.id.btn_edit)
 
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -114,28 +133,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         tv_timer.text = result
 
-                        //println("${distance1[0]}/${distance2[0]}")
-
-                        if (currentLocation != null) {
-                            Location.distanceBetween(
-                                currentLocation!!.latitude,
-                                currentLocation!!.longitude,
-                                ivanovo1.latitude,
-                                ivanovo1.longitude,
-                                distance1
-                            )
-
-                            Location.distanceBetween(
-                                currentLocation!!.latitude,
-                                currentLocation!!.longitude,
-                                ivanovo2.latitude,
-                                ivanovo2.longitude,
-                                distance2
-                            )
-
-                        }
-
-
                     }
 
                 }, IntentFilter(MyServiceTimer.ACTION_COUNT_BROADCAST)
@@ -148,6 +145,54 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         circleOptions1 = CircleOptions()
         circleOptions2 = CircleOptions()
+
+        btn_edit.setOnClickListener {
+            val li = LayoutInflater.from(this)
+            val promptsView: View = li.inflate(R.layout.prompt, null)
+
+            val myDialogBuilder = AlertDialog.Builder(this)
+            myDialogBuilder.setView(promptsView)
+
+            val userInput: EditText = promptsView.findViewById(R.id.input_text)
+
+            myDialogBuilder.setCancelable(false)
+                .setPositiveButton("Ok") { dialog, id -> rad = userInput.text.toString().toDouble() }
+                .setNegativeButton("Отмена") { dialog, id -> dialog.cancel() }
+
+            val alertDialog: AlertDialog = myDialogBuilder.create()
+            alertDialog.show()
+        }
+
+        mMap.setOnMapClickListener {
+
+            if (rad != null) {
+
+                val circleOptions = CircleOptions()
+                        .center(it)
+                        .radius(rad!!)
+
+                ctemp = mMap.addCircle(circleOptions)
+                mtemp = mMap.addMarker(MarkerOptions().position(it).title("Marker"))
+                markerCount++
+
+                if (markerCount > 2) {
+                    val myDialogFragment = MyDialogFragment()
+                    val manager = supportFragmentManager
+                    myDialogFragment.show(manager, "myDialog")
+                }
+
+                if (m1 == null) {
+                    m1 = mtemp
+                    circle1 = ctemp
+                } else if (m2 == null) {
+                    m2 = mtemp
+                    circle2 = ctemp
+                }
+
+            } else Toast.makeText(this, "Введите радиус", Toast.LENGTH_SHORT).show()
+
+        }
+
         val c1 = circleOptions1.center(ivanovo1).radius(radius)
         val c2 = circleOptions2.center(ivanovo2).radius(radius)
         mMap.addCircle(c1)
@@ -163,6 +208,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
         }
+    }
+
+    fun firstClicked() {
+        Toast.makeText(this, "Вы удалили первую точку", Toast.LENGTH_SHORT).show()
+        m1?.remove()
+        m1 = mtemp
+        circle1?.remove()
+        circle1 = ctemp
+    }
+
+    fun secondClicked() {
+        Toast.makeText(this, "Вы удалили вторую точку", Toast.LENGTH_SHORT).show()
+        m2?.remove()
+        m2 = mtemp
+        circle2?.remove()
+        circle2 = ctemp
+    }
+
+    fun thirdClicked() {
+        Toast.makeText(this, "Отмена действия", Toast.LENGTH_SHORT).show()
+        mtemp?.remove()
+        ctemp?.remove()
     }
 
 

@@ -23,6 +23,17 @@
             android:textStyle="bold"
             />
 
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:text="Радиус"
+            android:layout_marginLeft="200dp"
+            android:layout_centerVertical="true"
+            android:textSize="8dp"
+            />
+
     </androidx.appcompat.widget.Toolbar>
 
 <fragment
@@ -32,6 +43,8 @@
     android:layout_height="450dp"
     android:layout_below="@id/toolbar"
     tools:context=".MapsActivity" />
+
+
 
     <TextView
         android:id="@+id/txt_location"
