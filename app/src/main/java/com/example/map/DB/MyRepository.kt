@@ -2,6 +2,7 @@ package com.example.map.DB
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,6 +34,20 @@ class MyRepository {
                 ormDatabase!!.daoDatabaseORM().deleteAll()
             }
         }
+
+
+        fun insertCircle(context: Context, model: CircleModel) {
+            ormDatabase = initDB(context)
+            GlobalScope.launch(Dispatchers.IO) {
+                ormDatabase!!.daoDatabaseORM().insertCircle(model)
+            }
+        }
+
+        fun selectRadius(context: Context, radius: Double, latitude: Double, longitude: Double): LiveData<CircleModel> {
+            ormDatabase = initDB(context)
+            return ormDatabase!!.daoDatabaseORM().selectRadius(radius, latitude, longitude)
+        }
+
 
     }
 

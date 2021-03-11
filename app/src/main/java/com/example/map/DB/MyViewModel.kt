@@ -3,8 +3,7 @@ package com.example.map.DB
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.map.DB.DatabaseORMModel
-import com.example.map.DB.MyRepository
+import com.google.android.gms.maps.model.LatLng
 
 class MyViewModel(): ViewModel() {
 
@@ -18,6 +17,14 @@ class MyViewModel(): ViewModel() {
 
     fun deleteAll(context: Context) {
         MyRepository.deleteAll(context)
+    }
+
+    fun insertCircle(context: Context, model: CircleModel) {
+        MyRepository.insertCircle(context, model)
+    }
+
+    fun selectRadius(context: Context, radius: Double, latitude: Double, longitude: Double): LiveData<CircleModel> {
+        return MyRepository.selectRadius(context, radius, latitude, longitude)
     }
 
 }

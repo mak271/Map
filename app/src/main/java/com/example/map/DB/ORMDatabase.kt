@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [DatabaseORMModel::class], version = 1)
+@Database(entities = [DatabaseORMModel::class, CircleModel::class], version = 3)
 abstract class ORMDatabase: RoomDatabase() {
 
     abstract fun daoDatabaseORM(): DAODatabaseORM
@@ -16,7 +16,7 @@ abstract class ORMDatabase: RoomDatabase() {
         fun getORMDatabase(context: Context): ORMDatabase? {
             if (db == null) {
                 synchronized(ORMDatabase::class) {
-                    db = Room.databaseBuilder(context, ORMDatabase::class.java, "DatabaseMap").build()
+                    db = Room.databaseBuilder(context, ORMDatabase::class.java, "DatabaseMap").fallbackToDestructiveMigration().build()
                 }
             }
             return db
