@@ -6,5 +6,5 @@ import androidx.room.TypeConverters
 import com.google.android.gms.maps.model.LatLng
 
 @Entity
-data class CircleModel(@PrimaryKey val radius: Double, val latitude: Double, val longitude: Double)
+data class CircleModel1(@PrimaryKey(autoGenerate = true) val id: Int, val radius: Double, val latitude: Double, val longitude: Double)
 

@@ -36,16 +36,28 @@ class MyRepository {
         }
 
 
-        fun insertCircle(context: Context, model: CircleModel) {
+        fun insertCircle1(context: Context, model: CircleModel1) {
             ormDatabase = initDB(context)
             GlobalScope.launch(Dispatchers.IO) {
-                ormDatabase!!.daoDatabaseORM().insertCircle(model)
+                ormDatabase!!.daoDatabaseORM().insertCircle1(model)
             }
         }
 
-        fun selectRadius(context: Context, radius: Double, latitude: Double, longitude: Double): LiveData<CircleModel> {
+        fun selectRadius1(context: Context): LiveData<CircleModel1> {
             ormDatabase = initDB(context)
-            return ormDatabase!!.daoDatabaseORM().selectRadius(radius, latitude, longitude)
+            return ormDatabase!!.daoDatabaseORM().selectRadius1()
+        }
+
+        fun insertCircle2(context: Context, model: CircleModel2) {
+            ormDatabase = initDB(context)
+            GlobalScope.launch(Dispatchers.IO) {
+                ormDatabase!!.daoDatabaseORM().insertCircle2(model)
+            }
+        }
+
+        fun selectRadius2(context: Context): LiveData<CircleModel2> {
+            ormDatabase = initDB(context)
+            return ormDatabase!!.daoDatabaseORM().selectRadius2()
         }
 
 

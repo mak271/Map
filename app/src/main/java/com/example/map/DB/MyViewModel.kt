@@ -19,12 +19,20 @@ class MyViewModel(): ViewModel() {
         MyRepository.deleteAll(context)
     }
 
-    fun insertCircle(context: Context, model: CircleModel) {
-        MyRepository.insertCircle(context, model)
+    fun insertCircle1(context: Context, model: CircleModel1) {
+        MyRepository.insertCircle1(context, model)
     }
 
-    fun selectRadius(context: Context, radius: Double, latitude: Double, longitude: Double): LiveData<CircleModel> {
-        return MyRepository.selectRadius(context, radius, latitude, longitude)
+    fun selectRadius1(context: Context): LiveData<CircleModel1> {
+        return MyRepository.selectRadius1(context)
+    }
+
+    fun insertCircle2(context: Context, model: CircleModel2) {
+        MyRepository.insertCircle2(context, model)
+    }
+
+    fun selectRadius2(context: Context): LiveData<CircleModel2> {
+        return MyRepository.selectRadius2(context)
     }
 
 }

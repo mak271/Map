@@ -18,9 +18,15 @@ interface DAODatabaseORM {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCircle(mode: CircleModel)
+    fun insertCircle1(mode: CircleModel1): Long
 
-    @Query("SELECT * FROM CircleModel WHERE radius = :radius AND latitude = :latitude AND longitude = :longitude")
-    fun selectRadius(radius: Double, latitude: Double, longitude: Double): LiveData<CircleModel>
+    @Query("SELECT * FROM CircleModel1 ORDER BY id DESC LIMIT 1")
+    fun selectRadius1(): LiveData<CircleModel1>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCircle2(mode: CircleModel2): Long
+
+    @Query("SELECT * FROM CircleModel2 ORDER BY id DESC LIMIT 1")
+    fun selectRadius2(): LiveData<CircleModel2>
 
 }

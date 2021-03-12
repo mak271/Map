@@ -8,11 +8,21 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationResult
 import com.example.map.DB.DatabaseORMModel
 import com.example.map.DatabaseActivity.Companion.myViewModel
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class MyServiceLocation : BroadcastReceiver() {
 
+    private var lat: Double = 0.0
+    private var lon: Double = 0.0
+
+
+
     companion object {
         val ACTION_PROCESS_UPDATE = "com.example.map.UPDATE_LOCATION"
+
+        val distance1 = FloatArray(2)
+        val distance2 = FloatArray(2)
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -24,37 +34,33 @@ class MyServiceLocation : BroadcastReceiver() {
                     val location: Location = result.lastLocation
                     try {
 
-                        Location.distanceBetween(
-                                location.latitude,
-                                location.longitude,
-                                MapsActivity.ivanovo1.latitude,
-                                MapsActivity.ivanovo1.longitude,
-                                MapsActivity.distance1
-                        )
+                        if (MapsActivity.latlng1 != null) {
 
-                        Location.distanceBetween(
-                                location.latitude,
-                                location.longitude,
-                                MapsActivity.ivanovo2.latitude,
-                                MapsActivity.ivanovo2.longitude,
-                                MapsActivity.distance2
-                        )
+                            lat = MapsActivity.latlng1?.latitude!!
+                            lon = MapsActivity.latlng1?.longitude!!
 
-                        if (MapsActivity.m1 != null) {
                             Location.distanceBetween(
-                                location.latitude,
-                                location.longitude,
-                                MapsActivity.m1?.position?.latitude!!,
-                                MapsActivity.m1?.position?.longitude!!,
-                                MapsActivity.distance3
+                                    location.latitude,
+                                    location.longitude,
+                                    lat,
+                                    lon,
+                                    distance1
                             )
+
                         }
 
+                        if (MapsActivity.latlng2 != null) {
+                            Location.distanceBetween(
+                                    location.latitude,
+                                    location.longitude,
+                                    MapsActivity.latlng2?.latitude!!,
+                                    MapsActivity.latlng2?.longitude!!,
+                                    distance2
+                            )
 
+                        }
 
-
-
-
+                        println("${distance1[0]}/${distance2[0]}")
 
                         MapsActivity.getMainInstance().update(location)
 
@@ -64,18 +70,12 @@ class MyServiceLocation : BroadcastReceiver() {
                         Location.distanceBetween(
                                 location.latitude,
                                 location.longitude,
-                                MapsActivity.ivanovo1.latitude,
-                                MapsActivity.ivanovo1.longitude,
-                                MapsActivity.distance1
+                                lat,
+                                lon,
+                                distance1
                         )
 
-                        Location.distanceBetween(
-                                location.latitude,
-                                location.longitude,
-                                MapsActivity.ivanovo2.latitude,
-                                MapsActivity.ivanovo2.longitude,
-                                MapsActivity.distance2
-                        )
+                        println("${distance1[0]}/${distance2[0]}")
 
                     }
                 }

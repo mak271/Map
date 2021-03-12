@@ -16,7 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.map.DB.MyViewModel
 import com.example.map.DB.ViewModelFactory
-import com.example.map.DB.CircleModel
+import com.example.map.DB.CircleModel1
+import com.example.map.DB.CircleModel2
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -34,12 +35,11 @@ import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-    private lateinit var circleOptions1: CircleOptions
-    private lateinit var circleOptions2: CircleOptions
+    var myViewModel: MyViewModel? = null
+
+    lateinit var mMap: GoogleMap
     private lateinit var circleOptions3: CircleOptions
     private lateinit var circleOptions4: CircleOptions
-    var myViewModel: MyViewModel? = null
 
     private lateinit var tv_timer: TextView
     private lateinit var text_view: TextView
@@ -47,31 +47,30 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var tv_radius2: TextView
 
     var markerCount: Int = 0
-
+    var rad3: Double = 20.0
 
     private var circle1: Circle? = null
     private var circle2: Circle? = null
     private var circle3: Circle? = null
 
     private var latlng: LatLng? = null
-    private var latlng1: LatLng? = null
-    private var latlng2: LatLng? = null
+
+    var pref: SharedPreferences? = null
 
     companion object {
-        const val radius = 30.0
+
 
         var rad1: Double? = null
         var rad2: Double? = null
-        var rad3: Double = 20.0
+
+        var latlng1: LatLng? = null
+        var latlng2: LatLng? = null
 
         val ivanovo1 = LatLng(56.99545039, 40.96074659)
-        val ivanovo2 = LatLng(56.99670852, 40.96133581)
+
         var m1: Marker? = null
         var m2: Marker? = null
         var m3: Marker? = null
-        val distance1 = FloatArray(2)
-        val distance2 = FloatArray(2)
-        val distance3 = FloatArray(2)
 
 
         var instance: MapsActivity? = null
@@ -105,6 +104,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         tv_radius2 = findViewById(R.id.tv_radius2)
 
         myViewModel = ViewModelProvider(this, ViewModelFactory()).get(MyViewModel::class.java)
+
+        pref = getSharedPreferences("Table", Context.MODE_PRIVATE)
+        markerCount = pref?.getInt("Count", markerCount)!!
+
+
 
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -140,6 +144,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         tv_timer.text = result
 
+
                     }
 
                 }, IntentFilter(MyServiceTimer.ACTION_COUNT_BROADCAST)
@@ -150,26 +155,37 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        circleOptions1 = CircleOptions()
-        circleOptions2 = CircleOptions()
         circleOptions3 = CircleOptions()
         circleOptions4 = CircleOptions()
 
 
+        myViewModel?.selectRadius1(this)?.observe(this, {
+            if (it != null) {
+                latlng1 = LatLng(it.latitude, it.longitude)
+                rad1 = it.radius
+                m1 = mMap.addMarker(MarkerOptions().position(latlng1!!).title("Marker").snippet("First"))
+                circleOptions3.center(latlng1).radius(it.radius)
+                circle1 = mMap.addCircle(circleOptions3)
+            }
+
+
+        })
+
+        myViewModel?.selectRadius2(this)?.observe(this, {
+            if (it != null) {
+                latlng2 = LatLng(it.latitude, it.longitude)
+                rad2 = it.radius
+                m2 = mMap.addMarker(MarkerOptions().position(latlng2!!).title("Marker").snippet("Second"))
+                circleOptions4.center(latlng2).radius(it.radius)
+                circle2 = mMap.addCircle(circleOptions4)
+            }
+
+        })
 
         val seekBar1: SeekBar = findViewById(R.id.seek_bar1)
         seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, p2: Boolean) {
                 tv_radius1.text = progress.toString()
-                rad1 = progress.toDouble()
-                if (latlng1 != null) {
-                    m1?.remove()
-                    circle1?.remove()
-                    circleOptions3.center(latlng1).radius(progress.toDouble())
-                    m1 = mMap.addMarker(MarkerOptions().position(latlng1!!).title("Marker").snippet("First"))
-                    circle1 = mMap.addCircle(circleOptions3)
-                }
-
 
             }
 
@@ -178,6 +194,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
+
+                if (latlng1 != null) {
+                    rad1 = p0?.progress?.toDouble()
+                    m1?.remove()
+                    circle1?.remove()
+                    myViewModel?.insertCircle1(this@MapsActivity, CircleModel1(0, rad1!!, latlng1?.latitude!!, latlng1?.longitude!!))
+                }
+
 
             }
 
@@ -187,16 +211,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         seekBar2.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, p2: Boolean) {
                 tv_radius2.text = progress.toString()
-                rad2 = progress.toDouble()
-                if (latlng2 != null) {
-                    m2?.remove()
-                    circle2?.remove()
-                    circleOptions4.center(latlng2).radius(progress.toDouble())
-                    m2 = mMap.addMarker(MarkerOptions().position(latlng2!!).title("Marker").snippet("Second"))
-                    circle2 = mMap.addCircle(circleOptions4)
-                }
-
-
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -205,6 +219,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
 
+                if (latlng2 != null) {
+                    rad2 = p0?.progress?.toDouble()
+                    m2?.remove()
+                    circle2?.remove()
+                    myViewModel?.insertCircle2(this@MapsActivity, CircleModel2(0, rad2!!, latlng2?.latitude!!, latlng2?.longitude!!))
+                }
             }
 
         })
@@ -218,6 +238,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 circle3 = mMap.addCircle(circleOptions3)
 
                 markerCount++
+                saveCount(markerCount)
 
                 if (markerCount > 2) {
                     val myDialogFragment = MyDialogFragment()
@@ -239,10 +260,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         }
 
-        val c1 = circleOptions1.center(ivanovo1).radius(radius)
-        val c2 = circleOptions2.center(ivanovo2).radius(radius)
-        mMap.addCircle(c1)
-        mMap.addCircle(c2)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ivanovo1, 17F))
         enableMyLocation()
 
@@ -305,7 +322,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         locationRequest.smallestDisplacement = 10f
     }
 
-
+    private fun saveCount(res: Int) {
+        val editor = pref?.edit()
+        editor?.putInt("Count", res)
+        editor?.apply()
+    }
 
 
 

@@ -35,6 +35,7 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
             tvDate.text = "$formatted_date    $formatted_day"
             tvStart.text = "Вошёл: ${item.start}"
             tvEnd.text = "Вышел: ${item.end}"
+            tvName.text = item.name
         }
 
     }
@@ -53,6 +54,7 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         val tvDate: TextView = itemView.findViewById(R.id.tv_date)
         val tvStart: TextView = itemView.findViewById(R.id.tv_start)
         val tvEnd: TextView = itemView.findViewById(R.id.tv_end)
+        val tvName: TextView = itemView.findViewById(R.id.tv_name)
     }
 
 }

@@ -30,12 +30,18 @@ class MyServiceTimer : Service() {
     var myViewModel: MyViewModel? = null
 
     var count: Double = 0.0
-    var startTime: String? = null
-    var endTime: String? = null
+    var startTime1: String? = null
+    var startTime2: String? = null
+    var endTime1: String? = null
+    var endTime2: String? = null
+    var flag = ""
 
     companion object {
         val ACTION_COUNT_BROADCAST: String = MyServiceTimer::class.java.name + "CountBroadcast"
         val EXTRA_TIME = "extra_time"
+
+        var dist1: Float = 0.0F
+        var dist2: Float = 0.0f
     }
 
     private inner class HandlerService(looper: Looper): Handler(looper) {
@@ -52,17 +58,27 @@ class MyServiceTimer : Service() {
     private fun resetTimer() {
 
         if (count != 0.0) {
-            endTime = sdf?.format(calendar?.time)
-            println("End")
 
             myViewModel = MyViewModel()
-            myViewModel?.insert(this, DatabaseORMModel(startTime!!, endTime!!))
+            if (flag == "First") {
+                endTime1 = sdf?.format(calendar?.time)
+                myViewModel?.insert(this, DatabaseORMModel(flag, startTime1!!, endTime1!!))
+                startTime1 = null
+            }
+            else if (flag == "Second") {
+                endTime2 = sdf?.format(calendar?.time)
+                myViewModel?.insert(this, DatabaseORMModel(flag, startTime2!!, endTime2!!))
+                startTime2 = null
+            }
+
 
         }
 
         count = 0.0
         sendBroadcastMessage(formatTime(0,0,0))
     }
+
+
 
 
     private fun startTimer() {
@@ -75,26 +91,51 @@ class MyServiceTimer : Service() {
 
 
 
-                        if (((MapsActivity.distance1[0] <= MapsActivity.radius) && (MapsActivity.distance1[0] >= 0.1)) || ((MapsActivity.distance2[0] <= MapsActivity.radius) && (MapsActivity.distance2[0] >= 0.1))
-                            ) {
+                    if (MapsActivity.rad1 != null) {
+
+                        if ((MyServiceLocation.distance1[0] <= MapsActivity.rad1!!) && (MyServiceLocation.distance1[0] >= 0.1)) {
 
                             if (count == 0.0)
-                                startTime = sdf?.format(calendar?.time)
+                                startTime1 = sdf?.format(calendar?.time)
 
 
                             count++
                             sendBroadcastMessage(getTimerText())
-                            println(count)
+                            //println(count)
 
                         }
-                        else  {
+                        else {
+                            if (startTime1 != null) {
+                                flag = "First"
+                                resetTimer()
+                            }
 
-
-                            resetTimer()
                         }
 
+                    }
+
+                    if (MapsActivity.rad2 != null) {
+
+                        if ((MyServiceLocation.distance2[0] <= MapsActivity.rad2!!) && (MyServiceLocation.distance2[0] >= 0.1)) {
+
+                            if (count == 0.0)
+                                startTime2 = sdf?.format(calendar?.time)
 
 
+                            count++
+                            sendBroadcastMessage(getTimerText())
+                            //println(count)
+
+                        }
+                        else {
+                            if (startTime2 != null) {
+                                flag = "Second"
+                                resetTimer()
+                            }
+
+                        }
+
+                    }
 
 
                 }
