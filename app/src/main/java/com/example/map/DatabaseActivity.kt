@@ -15,10 +15,7 @@ class DatabaseActivity: AppCompatActivity() {
 
     private lateinit var adapter: MyAdapter
 
-
-    companion object {
-        var myViewModel: MyViewModel? = null
-    }
+    var myViewModel: MyViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

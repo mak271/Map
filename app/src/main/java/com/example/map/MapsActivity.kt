@@ -42,7 +42,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var circleOptions4: CircleOptions
 
     private lateinit var tv_timer: TextView
-    private lateinit var text_view: TextView
     private lateinit var tv_radius1: TextView
     private lateinit var tv_radius2: TextView
 
@@ -57,49 +56,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var pref: SharedPreferences? = null
 
-    companion object {
+    var rad1: Double? = null
+    var rad2: Double? = null
 
+    var latlng1: LatLng? = null
+    var latlng2: LatLng? = null
 
-        var rad1: Double? = null
-        var rad2: Double? = null
+    val ivanovo1 = LatLng(56.99545039, 40.96074659)
 
-        var latlng1: LatLng? = null
-        var latlng2: LatLng? = null
-
-        val ivanovo1 = LatLng(56.99545039, 40.96074659)
-
-        var m1: Marker? = null
-        var m2: Marker? = null
-        var m3: Marker? = null
-
-
-        var instance: MapsActivity? = null
-
-        fun getMainInstance(): MapsActivity {
-            return instance!!
-        }
-    }
-
-    fun update(value: Location) {
-        this@MapsActivity.runOnUiThread {
-            text_view.text = "${value.latitude}/${value.longitude}"
-        }
-    }
+    var m1: Marker? = null
+    var m2: Marker? = null
+    var m3: Marker? = null
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        instance = this
-
         tv_timer = findViewById(R.id.tv_timer)
-        text_view = findViewById(R.id.txt_location)
+
         tv_radius1 = findViewById(R.id.tv_radius1)
         tv_radius2 = findViewById(R.id.tv_radius2)
 
