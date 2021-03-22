@@ -4,4 +4,4 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class DatabaseORMModel(@PrimaryKey(autoGenerate = true) val id: Int, val name: String, val start: String, val end: String)
+data class DatabaseORMModel(@PrimaryKey(autoGenerate = true) val id: Int, val name: String, val start: String, val end: String, val time: String, val date: String, val dayOfWeek: String)

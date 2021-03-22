@@ -19,20 +19,26 @@ class MyViewModel(): ViewModel() {
         MyRepository.deleteAll(context)
     }
 
-    fun insertCircle1(context: Context, model: CircleModel1) {
-        MyRepository.insertCircle1(context, model)
+    fun insertCircle(context: Context, model: CircleModel) {
+        MyRepository.insertCircle(context, model)
     }
 
-    fun selectRadius1(context: Context): LiveData<CircleModel1> {
-        return MyRepository.selectRadius1(context)
+    fun deleteCircle1(context: Context) {
+        MyRepository.deleteCircle1(context)
     }
 
-    fun insertCircle2(context: Context, model: CircleModel2) {
-        MyRepository.insertCircle2(context, model)
+    fun deleteCircle2(context: Context) {
+        MyRepository.deleteCircle2(context)
     }
 
-    fun selectRadius2(context: Context): LiveData<CircleModel2> {
-        return MyRepository.selectRadius2(context)
+    fun selectCircle1(context: Context): LiveData<CircleModel> {
+        return MyRepository.selectCircle1(context)
     }
+
+    fun selectCircle2(context: Context): LiveData<CircleModel> {
+        return MyRepository.selectCircle2(context)
+    }
+
+
 
 }

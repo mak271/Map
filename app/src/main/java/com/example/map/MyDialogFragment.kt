@@ -13,8 +13,8 @@ class MyDialogFragment: DialogFragment() {
 
         builder.setMessage("Пожалуйста удалите одну из геолокаций")
                 .setTitle("Слишком много геолокаций")
-                .setNegativeButton("Первая") { dialogInterface, i -> (activity as MapsActivity).firstClicked() }
-                .setPositiveButton("Вторая") { dialogInterface, i -> (activity as MapsActivity).secondClicked() }
+                .setNegativeButton(MapsActivity.name1) { dialogInterface, i -> (activity as MapsActivity).firstClicked() }
+                .setPositiveButton(MapsActivity.name2) { dialogInterface, i -> (activity as MapsActivity).secondClicked() }
                 .setNeutralButton("Отмена") { dialogInterface, i -> (activity as MapsActivity).thirdClicked() }
 
         return builder.create()

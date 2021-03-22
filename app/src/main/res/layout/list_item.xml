@@ -23,7 +23,21 @@
         android:layout_marginBottom="20dp"
         />
 
+    <TextView
+        android:id="@+id/tv_day_of_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Monday"
+        android:textSize="16dp"
+        android:layout_toEndOf="@+id/tv_date"
+        android:layout_marginStart="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        />
+
     <LinearLayout
+        android:id="@+id/list_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -37,7 +51,17 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:text="10:20:30"/>
+            android:text="Вошёл: 10:20:30"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:textColor="@color/black"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="Пробыл: 10:20:30"/>
 
         <TextView
             android:id="@+id/tv_end"
@@ -47,10 +71,16 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center"
-            android:text="10:20:30"/>
+            android:text="Вышел: 10:20:30"/>
 
     </LinearLayout>
 
-
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/list_linear"
+        android:layout_marginTop="25dp"
+        android:background="@color/cardview_dark_background" />
 
 </RelativeLayout>

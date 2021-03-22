@@ -13,12 +13,6 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     private val listItem = mutableListOf<DatabaseORMModel>()
 
-    val calendar: Calendar = Calendar.getInstance()
-    val day = SimpleDateFormat("EEEE")
-    val sdf = SimpleDateFormat("dd.MM.y")
-    val formatted_day: String = day.format(calendar.time)
-    val formatted_date: String = sdf.format(calendar.time)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutId: Int = R.layout.list_item
@@ -32,10 +26,12 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         val item = listItem[position]
 
         holder.apply {
-            tvDate.text = "$formatted_date    $formatted_day"
+            tvDate.text = item.date
+            tvDayOfWeek.text = item.dayOfWeek
             tvStart.text = "Вошёл: ${item.start}"
             tvEnd.text = "Вышел: ${item.end}"
             tvName.text = item.name
+            tvTime.text = item.time
         }
 
     }
@@ -52,9 +48,11 @@ class MyAdapter(): RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tvDate: TextView = itemView.findViewById(R.id.tv_date)
+        val tvDayOfWeek: TextView = itemView.findViewById(R.id.tv_day_of_week)
         val tvStart: TextView = itemView.findViewById(R.id.tv_start)
         val tvEnd: TextView = itemView.findViewById(R.id.tv_end)
         val tvName: TextView = itemView.findViewById(R.id.tv_name)
+        val tvTime: TextView = itemView.findViewById(R.id.tv_time)
     }
 
 }

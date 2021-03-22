@@ -9,23 +9,44 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcView"
         android:layout_width="match_parent"
-        android:layout_height="500dp" />
-
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rcView"
-        android:layout_centerHorizontal="true"
-        android:text="Назад"
+        android:layout_height="530dp"
+        android:layout_marginBottom="20dp"
         />
 
-    <Button
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rcView"
-        android:text="Очистить"
-        />
+        android:orientation="horizontal"
+        android:layout_below="@+id/rcView">
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="12sp"
+            android:text="Очистить"/>
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="12sp"
+            android:text="Карта"/>
+
+        <Button
+            android:id="@+id/btn_back_db"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:textSize="12sp"
+            android:text="назад"/>
+
+    </LinearLayout>
+
 
 </RelativeLayout>

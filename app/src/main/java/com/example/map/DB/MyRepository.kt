@@ -35,29 +35,35 @@ class MyRepository {
             }
         }
 
-
-        fun insertCircle1(context: Context, model: CircleModel1) {
+        fun insertCircle(context: Context, model: CircleModel) {
             ormDatabase = initDB(context)
             GlobalScope.launch(Dispatchers.IO) {
-                ormDatabase!!.daoDatabaseORM().insertCircle1(model)
+                ormDatabase!!.daoDatabaseORM().insertCircle(model)
             }
         }
 
-        fun selectRadius1(context: Context): LiveData<CircleModel1> {
-            ormDatabase = initDB(context)
-            return ormDatabase!!.daoDatabaseORM().selectRadius1()
-        }
-
-        fun insertCircle2(context: Context, model: CircleModel2) {
+        fun deleteCircle1(context: Context) {
             ormDatabase = initDB(context)
             GlobalScope.launch(Dispatchers.IO) {
-                ormDatabase!!.daoDatabaseORM().insertCircle2(model)
+                ormDatabase!!.daoDatabaseORM().deleteCircle1()
             }
         }
 
-        fun selectRadius2(context: Context): LiveData<CircleModel2> {
+        fun deleteCircle2(context: Context) {
             ormDatabase = initDB(context)
-            return ormDatabase!!.daoDatabaseORM().selectRadius2()
+            GlobalScope.launch(Dispatchers.IO) {
+                ormDatabase!!.daoDatabaseORM().deleteCircle2()
+            }
+        }
+
+        fun selectCircle1(context: Context): LiveData<CircleModel> {
+            ormDatabase = initDB(context)
+            return ormDatabase!!.daoDatabaseORM().selectCircle1()
+        }
+
+        fun selectCircle2(context: Context): LiveData<CircleModel> {
+            ormDatabase = initDB(context)
+            return ormDatabase!!.daoDatabaseORM().selectCircle2()
         }
 
 

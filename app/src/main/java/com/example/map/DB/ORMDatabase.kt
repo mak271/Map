@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [DatabaseORMModel::class, CircleModel1::class, CircleModel2::class], version = 7)
+@Database(entities = [DatabaseORMModel::class, CircleModel::class], version = 12)
 abstract class ORMDatabase: RoomDatabase() {
 
     abstract fun daoDatabaseORM(): DAODatabaseORM

@@ -32,11 +32,21 @@ class DatabaseActivity: AppCompatActivity() {
         })
 
         findViewById<Button>(R.id.btn_back).setOnClickListener {
-            startActivity(Intent(this, MapsActivity::class.java))
+            val intent = Intent(this, MapsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            finish()
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.btn_delete).setOnClickListener {
             myViewModel?.deleteAll(this)
+        }
+
+        findViewById<Button>(R.id.btn_back_db).setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            finish()
+            startActivity(intent)
         }
 
     }

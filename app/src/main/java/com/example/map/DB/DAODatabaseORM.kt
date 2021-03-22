@@ -16,17 +16,19 @@ interface DAODatabaseORM {
     @Query("DELETE FROM DatabaseORMModel")
     fun deleteAll()
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCircle1(mode: CircleModel1): Long
+    fun insertCircle(mode: CircleModel)
 
-    @Query("SELECT * FROM CircleModel1 ORDER BY id DESC LIMIT 1")
-    fun selectRadius1(): LiveData<CircleModel1>
+    @Query("DELETE FROM CircleModel WHERE id=0")
+    fun deleteCircle1()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCircle2(mode: CircleModel2): Long
+    @Query("DELETE FROM CircleModel WHERE id=1")
+    fun deleteCircle2()
 
-    @Query("SELECT * FROM CircleModel2 ORDER BY id DESC LIMIT 1")
-    fun selectRadius2(): LiveData<CircleModel2>
+    @Query("SELECT * FROM CircleModel WHERE id=0")
+    fun selectCircle1(): LiveData<CircleModel>
+
+    @Query("SELECT * FROM CircleModel WHERE id=1")
+    fun selectCircle2(): LiveData<CircleModel>
 
 }

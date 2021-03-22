@@ -1,4 +1,4 @@
-package com.example.map
+    package com.example.map
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,7 +12,7 @@ class MyServiceLocation : BroadcastReceiver() {
     companion object {
         val ACTION_PROCESS_UPDATE = "com.example.map.UPDATE_LOCATION"
 
-        val distance1 = FloatArray(2)
+        var distance1 = FloatArray(2)
         val distance2 = FloatArray(2)
     }
 
@@ -41,10 +41,29 @@ class MyServiceLocation : BroadcastReceiver() {
                                 distance2
                         )
 
-                        println("${distance1[0]}/${distance2[0]}")
+                        MapsActivity.getMapInstance().update(location)
+
+                        //println("${distance1[0]}/${distance2[0]}")
 
                     } catch (e: Exception) {
-                        Toast.makeText(context, location.toString(), Toast.LENGTH_SHORT).show()
+
+//                        Location.distanceBetween(
+//                            location.latitude,
+//                            location.longitude,
+//                            MyServiceTimer.lat1,
+//                            MyServiceTimer.lon1,
+//                            distance1
+//                        )
+//
+//                        Location.distanceBetween(
+//                            location.latitude,
+//                            location.longitude,
+//                            MyServiceTimer.lat2,
+//                            MyServiceTimer.lon2,
+//                            distance2
+//                        )
+
+                        //Toast.makeText(context, "${location.latitude}/${location.longitude}", Toast.LENGTH_SHORT).show()
 
                     }
                 }
